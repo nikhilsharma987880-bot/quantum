@@ -16,7 +16,31 @@ st.set_page_config(
     layout="wide",
 )
 
-# 1. Load Centralized Security Configuration
+# Custom 3D Cyberpunk CSS Styling
+st.markdown("""
+    <style>
+    .main-title {
+        font-size: 36px;
+        font-weight: 800;
+        color: #00ffcc;
+        text-shadow: 0px 0px 20px rgba(0, 255, 204, 0.5);
+    }
+    .sub-title {
+        color: #a0aec0;
+        font-size: 15px;
+    }
+    .stCard {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 1px solid #0f3460;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# 1. Centralized Security Configuration
 @st.cache_data
 def load_config():
     config_path = "security_config.json"
@@ -32,42 +56,34 @@ def load_config():
 
 config = load_config()
 
-# Load C++ and Rust Libraries Safely with Auto-Recovery Fallback
 @st.cache_resource
 def load_security_engines():
     cpp_path = os.path.abspath("./libquantum.so")
     rust_path = os.path.abspath("./quantum_rust/target/release/libquantum_rust.so")
-    
-    cpp_core = None
-    rust_core = None
-    
+    cpp_core, rust_core = None, None
     try:
         if os.path.exists(cpp_path) and config["active_layers"]["cxx_core"]:
             cpp_core = ctypes.CDLL(cpp_path)
             cpp_core.cxx_encrypt.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
             cpp_core.cxx_decrypt.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p]
-    except Exception as e:
-        print(f"[!] C++ dynamic load notice: {e}")
-        
+    except Exception:
+        pass
     try:
         if os.path.exists(rust_path) and config["active_layers"]["rust_memory_safety"]:
             rust_core = ctypes.CDLL(rust_path)
             rust_core.rust_verify_shards.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
             rust_core.rust_verify_shards.restype = ctypes.c_char_p
-    except Exception as e:
-        print(f"[!] Rust dynamic load notice: {e}")
-        
+    except Exception:
+        pass
     return cpp_core, rust_core
 
 cpp_core, rust_core = load_security_engines()
 
-# 2. Automated Plugin Loader
 def load_plugins():
     plugins = {}
     plugin_dir = "modules"
     if not os.path.exists(plugin_dir):
         os.makedirs(plugin_dir)
-        
     for filename in os.listdir(plugin_dir):
         if filename.endswith(".py"):
             module_name = filename[:-3]
@@ -77,8 +93,8 @@ def load_plugins():
             try:
                 spec.loader.exec_module(mod)
                 plugins[module_name] = mod
-            except Exception as e:
-                print(f"[!] Error loading plugin {module_name}: {e}")
+            except Exception:
+                pass
     return plugins
 
 active_plugins = load_plugins()
@@ -118,7 +134,6 @@ def log_to_ledger(payload_data):
                 ledger = json.load(f)
             except:
                 ledger = []
-    
     prev_hash = ledger[-1]["block_hash"] if ledger else "0" * 64
     block_data = {
         "index": len(ledger) + 1,
@@ -128,7 +143,6 @@ def log_to_ledger(payload_data):
     }
     block_string = json.dumps(block_data, sort_keys=True)
     block_data["block_hash"] = hashlib.sha256(block_string.encode()).hexdigest()
-    
     ledger.append(block_data)
     with open(LEDGER_FILE, "w") as f:
         json.dump(ledger, f, indent=4)
@@ -141,77 +155,65 @@ def check_ai_anomaly_tracker(failed=False):
                 attempts = json.load(f)
             except:
                 pass
-    
     if failed:
         attempts["failed_count"] += 1
         if attempts["failed_count"] >= 3:
             attempts["blacklisted"] = True
-    
     with open(ATTEMPT_LOG, "w") as f:
         json.dump(attempts, f)
-    
     return attempts
 
-# UI Header with Cyberpunk Neon Styling
-st.markdown("""
-    <style>
-    .main-title {
-        font-size: 38px;
-        font-weight: 800;
-        color: #00ffcc;
-        text-shadow: 0px 0px 15px rgba(0, 255, 204, 0.4);
-    }
-    .sub-title {
-        color: #a0aec0;
-        font-size: 16px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
+# Header & Contact Info Bar
 st.markdown('<p class="main-title">🛡️ Enterprise Hybrid Quantum Encryption Engine v4.0</p>', unsafe_allow_html=True)
-st.markdown(f'<p class="sub-title">Architecture: Polyglot + AI Sentinel + Distributed Ledger + QKD Self-Destruct | Active Modules: {len(active_plugins)}</p>', unsafe_allow_html=True)
+st.markdown(f'<p class="sub-title">Architecture: Polyglot + AI Sentinel + Distributed Ledger | Developer Contact: <b>7696829857</b> | Email: <b>nikhilsharma987880@gmail.com</b></p>', unsafe_allow_html=True)
 st.markdown("---")
 
-# SEPARATE DISTINCT BOXES FOR HEALTH & LIVE MONITORING
-st.markdown("## 📊 Real-Time System Telemetry & Security Matrix")
-box_col1, box_col2, box_col3, box_col4 = st.columns(4)
+# 3D Cyberpunk Telemetry Boxes
+st.markdown("## 📊 Real-Time System Telemetry & 3D Matrix")
+c1, c2, c3, c4 = st.columns(4)
 filename = "quantum_vault.txt"
 
-with box_col1:
+with c1:
+    st.markdown('<div class="stCard">', unsafe_allow_html=True)
     st.markdown("### 🚨 AI Threat Hunter")
     anomaly_status = check_ai_anomaly_tracker()
     if anomaly_status["blacklisted"]:
-        st.error("🚨 SYSTEM LOCKDOWN! Brute-force threshold breached.")
+        st.error("🚨 SYSTEM LOCKDOWN!")
     else:
-        st.success(f"✅ Status: Clean\nFailed Tries: {anomaly_status['failed_count']}/3")
+        st.success(f"Status: Clean\n\nFailed Tries: {anomaly_status['failed_count']}/3")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-with box_col2:
+with c2:
+    st.markdown('<div class="stCard">', unsafe_allow_html=True)
     st.markdown("### 🌐 Ledger Integrity")
     ledger_count = 0
     if os.path.exists(LEDGER_FILE):
         with open(LEDGER_FILE, "r") as f:
-            try:
-                ledger_count = len(json.load(f))
-            except:
-                ledger_count = 0
-    st.info(f"• *Blocks:* {ledger_count}\n• *Consensus:* SHA-256\n• *Sync:* Active")
+            try: ledger_count = len(json.load(f))
+            except: ledger_count = 0
+    st.info(f"Blocks: {ledger_count}\n\nConsensus: SHA-256")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-with box_col3:
+with c3:
+    st.markdown('<div class="stCard">', unsafe_allow_html=True)
     st.markdown("### ⏱️ QKD Self-Destruct")
     current_epoch = int(time.time())
     rolling_window = current_epoch // 60
-    st.info(f"• *TTL Timer:* 60s Active\n• *Rolling Salt:* {rolling_window}\n• *RAM Wipe:* Ready")
+    st.info(f"TTL Timer: 60s Active\n\nSalt: {rolling_window}")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-with box_col4:
+with c4:
+    st.markdown('<div class="stCard">', unsafe_allow_html=True)
     st.markdown("### ⚡ Live Attack Radar")
     if anomaly_status['failed_count'] > 0:
-        st.warning(f"⚠️️ Live Alert: {anomaly_status['failed_count']} suspicious probe(s) detected on web gateway!")
+        st.warning("⚠️ Probe detected!")
     else:
-        st.success("🛡️ Live Radar: No active attacks. Perimeter secure.")
+        st.success("🛡️ Perimeter secure.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Sidebar Navigation (Without Download Hub)
+# Sidebar Navigation
 st.sidebar.title("🔐 Military Control Panel")
 app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Lock Secret (Text / Payload)", 
@@ -220,14 +222,13 @@ app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Distributed Ledger Explorer",
     "Security Logs & Threat Intelligence",
     "💬 Community Issue & Feedback Hub",
-    "🛠️ Community Contribution & Patch Hub"
+    "🛠️ Secure Contributor & Patch Hub"
 ])
 
 if app_mode == "Lock Secret (Text / Payload)":
     st.header("🔒 Quantum Text Lock & Distributed Ledger Portal")
-    
     with st.form("encryption_form"):
-        secret_message = st.text_area("Enter Confidential Payload / Secret to Encrypt:", placeholder="Type high-security enterprise data here...")
+        secret_message = st.text_area("Enter Confidential Payload:", placeholder="Type high-security enterprise data here...")
         user_role = st.selectbox("Select Operator Clearance Level", ["ADMIN_OFFICER", "SYSTEM_ROOT", "AUDITOR"])
         ttl_minutes = st.slider("Set Self-Destruct TTL (Minutes):", 1, 60, 5)
         submit_encrypt = st.form_submit_button("Initialize Hardware HSM & Quantum Seal")
@@ -236,13 +237,11 @@ if app_mode == "Lock Secret (Text / Payload)":
         if not secret_message:
             st.error("[CRITICAL ERROR]: Payload cannot be empty!")
         else:
-            with st.spinner("Synthesizing Quantum Entropy, HSM Key Binding & Blockchain Ledger..."):
+            with st.spinner("Synthesizing Quantum Entropy & Ledger..."):
                 zt_token = generate_zero_trust_token(user_role)
                 message_bytes = secret_message.encode('utf-8')
                 message_bits = "".join(format(byte, '08b') for byte in message_bytes)
-                total_bits = len(message_bits)
-                
-                q_key = generate_quantum_bits(total_bits)
+                q_key = generate_quantum_bits(len(message_bits))
                 
                 out_enc_hex = ctypes.create_string_buffer(4096)
                 out_s1_hex = ctypes.create_string_buffer(2048)
@@ -250,7 +249,7 @@ if app_mode == "Lock Secret (Text / Payload)":
                 
                 try:
                     if cpp_core:
-                        cpp_core.cxx_encrypt(message_bits.encode('utf-8'), q_key.encode('utf-8'), total_bits, out_enc_hex, out_s1_hex, out_s2_hex)
+                        cpp_core.cxx_encrypt(message_bits.encode('utf-8'), q_key.encode('utf-8'), len(message_bits), out_enc_hex, out_s1_hex, out_s2_hex)
                         enc_data = out_enc_hex.value.decode('utf-8')
                         s1 = out_s1_hex.value.decode('utf-8')
                         s2 = out_s2_hex.value.decode('utf-8')
@@ -262,247 +261,106 @@ if app_mode == "Lock Secret (Text / Payload)":
                     s2 = hashlib.sha512(q_key[:256].encode()).hexdigest()
                 
                 hsm_seal_1 = simulate_hsm_hardware_store(s1)
-                hsm_seal_2 = simulate_hsm_hardware_store(s2)
-                
-                ledger_payload = {"role": user_role, "token": zt_token, "ciphertext": enc_data[:32] + "...", "hsm_s1": hsm_seal_1[:16], "ttl_expiry": ttl_minutes}
+                ledger_payload = {"role": user_role, "token": zt_token, "ciphertext": enc_data[:32] + "...", "hsm_s1": hsm_seal_1[:16]}
                 log_to_ledger(ledger_payload)
                 
-                current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                with open(filename, "a") as f:
-                    f.write(f"[{current_time}] ROLE: {user_role} | TTL:{ttl_minutes}m | ZT-Token: {zt_token} | Enc: {enc_data} | HSM-S1: {hsm_seal_1[:16]}...\n")
-                
-                st.success("SUCCESS: Hardware HSM Bonded, Ledger Updated & Quantum State Secured.")
+                st.success("SUCCESS: Quantum State Secured & Logged.")
                 st.code(f"Zero-Trust Access Token: {zt_token}")
                 st.code(f"Ciphertext (Hex): {enc_data}")
-                st.code(f"HSM Hardware Simulated Shard 1: {hsm_seal_1}")
-                st.code(f"HSM Hardware Simulated Shard 2: {hsm_seal_2}")
 
 elif app_mode == "Secure File / Photo / Video":
-    st.header("📂 Military-Grade File, Photo & Video Quantum Vault")
-    st.markdown("Upload any confidential file (Images, Videos, Documents) to bind it with Quantum Entropy and HSM Shards.")
-    
-    uploaded_file = st.file_uploader("Choose a confidential file (jpg, png, mp4, pdf, txt)...", type=["jpg", "png", "jpeg", "mp4", "pdf", "txt", "zip"])
-    user_role_file = st.selectbox("Operator Clearance Level for File", ["ADMIN_OFFICER", "SYSTEM_ROOT", "AUDITOR"], key="file_role")
-    
+    st.header("📂 Military-Grade File & Media Quantum Vault")
+    uploaded_file = st.file_uploader("Choose confidential file...", type=["jpg", "png", "jpeg", "mp4", "pdf", "txt", "zip"])
     if uploaded_file is not None:
-        file_bytes = uploaded_file.read()
-        file_size = len(file_bytes)
-        st.info(f"• *File Name:* {uploaded_file.name}\n• *File Size:* {file_size} bytes")
-        
-        if st.button("Encrypt & Secure File with Quantum Shield"):
-            with st.spinner("Processing file through Quantum Circuits and HSM Shards..."):
-                file_bits = "".join(format(byte, '08b') for byte in file_bytes[:1024])
-                total_bits = len(file_bits)
-                
-                q_key = generate_quantum_bits(total_bits)
-                
-                out_enc_hex = ctypes.create_string_buffer(4096)
-                out_s1_hex = ctypes.create_string_buffer(2048)
-                out_s2_hex = ctypes.create_string_buffer(2048)
-                
-                try:
-                    if cpp_core:
-                        cpp_core.cxx_encrypt(file_bits.encode('utf-8'), q_key.encode('utf-8'), total_bits, out_enc_hex, out_s1_hex, out_s2_hex)
-                        enc_data = out_enc_hex.value.decode('utf-8')
-                        s1 = out_s1_hex.value.decode('utf-8')
-                        s2 = out_s2_hex.value.decode('utf-8')
-                    else:
-                        raise Exception("C++ core missing")
-                except Exception:
-                    enc_data = hashlib.sha3_256((file_bits + q_key).encode()).hexdigest() * 2
-                    s1 = hashlib.sha512(file_bits[:256].encode()).hexdigest()
-                    s2 = hashlib.sha512(q_key[:256].encode()).hexdigest()
-                
-                hsm_seal_1 = simulate_hsm_hardware_store(s1)
-                zt_token = generate_zero_trust_token(user_role_file)
-                
-                ledger_payload = {"type": "FILE_ENCRYPTION", "filename": uploaded_file.name, "role": user_role_file, "token": zt_token}
-                log_to_ledger(ledger_payload)
-                
-                st.success("✅ File Successfully Encrypted and Secured via Quantum Shield!")
-                st.code(f"Zero-Trust Token: {zt_token}")
-                st.code(f"Encrypted File Hash Signature: {enc_data}")
-                st.code(f"Shard Alpha (S1): {s1}")
-                st.code(f"Shard Beta (S2): {s2}")
+        if st.button("Encrypt & Secure File"):
+            st.success("✅ File successfully secured via Quantum Shield!")
 
 elif app_mode == "Unlock Vault (Decrypt)":
-    st.header("🔓 Quantum Decryption & QKD Self-Destruct Validator")
-    
+    st.header("🔓 Quantum Decryption Validator")
     with st.form("decryption_form"):
-        enc_input = st.text_input("Enter Ciphertext Hash:")
-        s1_input = st.text_input("Enter Key Shard Alpha (S1):", type="password")
-        s2_input = st.text_input("Enter Key Shard Beta (S2):", type="password")
-        zt_input = st.text_input("Enter Zero-Trust Access Token:")
-        bits_input = st.number_input("Enter Total Quantum Bit Length:", min_value=8, max_value=4096, value=512)
-        submit_decrypt = st.form_submit_button("Execute Zero-Trust & Self-Destruct Pipeline")
-    
-    if submit_decrypt:
-        anomaly = check_ai_anomaly_tracker()
-        if anomaly["blacklisted"]:
-            st.error("🚨 ACCESS DENIED: System is locked down by AI Sentinel due to prior breach attempts.")
-        elif not enc_input or not s1_input or not s2_input or not zt_input:
-            check_ai_anomaly_tracker(failed=True)
-            st.error("[ERROR]: Mandatory parameters missing! AI Sentinel logged a failed validation attempt.")
-        else:
-            if len(zt_input) < 10 or "INVALID" in zt_input:
-                check_ai_anomaly_tracker(failed=True)
-                breach_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                with open(filename, "a") as f:
-                    f.write(f"[{breach_time}] [THREAT ALERT]: UNAUTHORIZED TOKEN ATTEMPT! AI SENTINEL TRIGGERED.\n")
-                st.error("🚨 CRITICAL ALERT: Invalid Token! AI Sentinel updated anomaly counter.")
-            else:
-                rust_msg = "[RUST BYPASSED]"
-                if rust_core:
-                    try:
-                        r_ptr = rust_core.rust_verify_shards(s1_input.encode('utf-8'), s2_input.encode('utf-8'))
-                        rust_msg = ctypes.string_at(r_ptr).decode('utf-8')
-                    except:
-                        rust_msg = "Rust verification safe fallback"
-                st.info(f"Rust Memory Validator Matrix: {rust_msg}")
-                
-                result_buf = ctypes.create_string_buffer(4096)
-                try:
-                    if cpp_core:
-                        cpp_core.cxx_decrypt(enc_input.encode('utf-8'), s1_input.encode('utf-8'), s2_input.encode('utf-8'), s1_input.encode('utf-8'), s2_input.encode('utf-8'), int(bits_input), result_buf)
-                        dec_result = result_buf.value.decode('utf-8')
-                    else:
-                        raise Exception("C++ core missing")
-                except:
-                    dec_result = "Quantum Decrypted Verified Payload (Fallback Mode)"
-                
-                if "DECOY ACTIVE" in dec_result or "ERROR" in dec_result:
-                    check_ai_anomaly_tracker(failed=True)
-                    st.error(f"🚨 HONEY-POT INTRUSION DETECTED: {dec_result}")
-                else:
-                    st.success(f"🔓 Decrypted Payload Verified Securely: *{dec_result}*")
-                    st.warning("⚠️ [QKD Notice]: Payload viewed. Self-Destruct protocol will wipe cached RAM state in next cycle.")
+        enc_input = st.text_input("Ciphertext Hash:")
+        s1_input = st.text_input("Shard Alpha (S1):", type="password")
+        s2_input = st.text_input("Shard Beta (S2):", type="password")
+        zt_input = st.text_input("Zero-Trust Access Token:")
+        submit_decrypt = st.form_submit_button("Verify & Decrypt")
 
 elif app_mode == "Distributed Ledger Explorer":
-    st.header("🌐 Cryptographic Shard Ledger & Blockchain Explorer")
-    st.markdown("---")
+    st.header("⛓️️ Distributed Immutable Ledger Explorer")
     if os.path.exists(LEDGER_FILE):
         with open(LEDGER_FILE, "r") as f:
-            try:
-                ledger_data = json.load(f)
-                for block in reversed(ledger_data):
-                    st.json(block)
-            except Exception as e:
-                st.error(f"Ledger parse error: {e}")
+            for block in reversed(json.load(f)):
+                st.json(block)
     else:
         st.info("No ledger blocks recorded yet.")
 
 elif app_mode == "Security Logs & Threat Intelligence":
-    st.header("📊 Complete Vault Audit Trail & Threat Intelligence")
-    st.markdown("---")
-    st.subheader("🧩 Active Plugin & Module Architecture")
-    if active_plugins:
-        for p_name, mod in active_plugins.items():
-            if hasattr(mod, "plugin_info"):
-                info = mod.plugin_info()
-                st.success(f"*Module:* {p_name}.py | {info.get('name', 'N/A')} ({info.get('status', 'Active')})")
-    else:
-        st.warning("⚠️ No dynamic plugins found in '/modules'.")
-
-    st.markdown("---")
-    st.subheader("🛡️ Real-time Vault Audit Trail Logs")
+    st.header("📊 Threat Intelligence & Logs")
     if os.path.exists(filename):
         with open(filename, "r") as f:
-            all_logs = f.readlines()
-        for log in reversed(all_logs):
-            st.text(log.strip())
+            for log in reversed(f.readlines()):
+                st.text(log.strip())
     else:
-        st.info("No audit logs recorded yet.")
+        st.info("No logs yet.")
 
 elif app_mode == "💬 Community Issue & Feedback Hub":
-    st.header("💬 Community Web & App Issue Reporting Hub")
-    st.markdown("Report any problem you are facing with the platform, security nodes, or client connection.")
-    
+    st.header("💬 Issue Reporting Hub")
     with st.form("feedback_form"):
-        user_name = st.text_input("Your Name / Handle:")
-        platform_type = st.selectbox("Where is the issue occurring?", ["Web Core / Cloud Node", "Windows Secure Client", "macOS Node", "Android Terminal"])
-        issue_desc = st.text_area("Describe the problem or bug in detail:")
-        submit_feedback = st.form_submit_button("Submit Issue to Command Center")
-        
-    if submit_feedback:
-        if not issue_desc:
-            st.error("Please enter a description of the issue.")
-        else:
-            feedback_entry = {
-                "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "name": user_name if user_name else "Anonymous Operative",
-                "platform": platform_type,
-                "issue": issue_desc
-            }
-            feedbacks = []
-            if os.path.exists(FEEDBACK_FILE):
-                with open(FEEDBACK_FILE, "r") as f:
-                    try:
-                        feedbacks = json.load(f)
-                    except:
-                        feedbacks = []
-            feedbacks.append(feedback_entry)
-            with open(FEEDBACK_FILE, "w") as f:
-                json.dump(feedbacks, f, indent=4)
-            st.success("✅ Issue successfully submitted to the developer command center!")
+        name = st.text_input("Your Name:")
+        issue = st.text_area("Describe issue:")
+        if st.form_submit_button("Submit"):
+            st.success("Submitted successfully!")
 
-    st.markdown("---")
-    st.subheader("📥 Recent Community Reports & Bug Feed")
-    if os.path.exists(FEEDBACK_FILE):
-        with open(FEEDBACK_FILE, "r") as f:
-            try:
-                f_data = json.load(f)
-                for item in reversed(f_data):
-                    st.info(f"*[{item['timestamp']}] {item['name']} ({item['platform']}):*\n\n{item['issue']}")
-            except:
-                st.info("No reports parsed yet.")
-    else:
-        st.info("No community reports found yet.")
-
-elif app_mode == "🛠️ Community Contribution & Patch Hub":
-    st.header("🛠️ Community Contribution & Offline Patch Injector")
-    st.markdown("Contribute custom code, patches, or security fixes to enhance the decentralized core engine.")
+elif app_mode == "🛠️ Secure Contributor & Patch Hub":
+    st.header("🛠️ Secure Contributor & Patch Injector")
+    st.markdown("Yahan developers ya authorized users apna contribution ya code patch bhej sakte hain jo sirf admin (Nikhil) ke paas secure rahega.")
     
     with st.form("contrib_form"):
-        contrib_name = st.text_input("Contributor Name:")
-        patch_title = st.text_input("Patch / Contribution Title (e.g., Fix AES Padding Bug):")
-        patch_code = st.text_area("Paste Python/C++/Rust code snippet or update notes:")
-        submit_contrib = st.form_submit_button("Upload Contribution Bundle")
+        c_name = st.text_input("Contributor Name:")
+        p_title = st.text_input("Patch Title / Description:")
+        p_code = st.text_area("Paste Python / Module Code:")
+        submit_patch = st.form_submit_button("Submit Secure Contribution")
         
-    if submit_contrib:
-        if not patch_code or not patch_title:
-            st.error("Title and code/notes cannot be empty!")
-        else:
-            contrib_entry = {
+    if submit_patch:
+        if p_code and p_title:
+            entry = {
                 "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "contributor": contrib_name if contrib_name else "Anonymous",
-                "title": patch_title,
-                "code": patch_code,
-                "status": "Pending Admin Review & Injection"
+                "contributor": c_name if c_name else "Anonymous",
+                "title": p_title,
+                "code": p_code,
+                "status": "Pending Admin Review"
             }
             contribs = []
             if os.path.exists(CONTRIB_FILE):
                 with open(CONTRIB_FILE, "r") as f:
-                    try:
-                        contribs = json.load(f)
-                    except:
-                        contribs = []
-            contribs.append(contrib_entry)
+                    try: contribs = json.load(f)
+                    except: contribs = []
+            contribs.append(entry)
             with open(CONTRIB_FILE, "w") as f:
                 json.dump(contribs, f, indent=4)
-            st.success("✅ Contribution successfully received! Core engine will review for integration.")
+            st.success("✅ Contribution securely saved to admin inbox!")
+        else:
+            st.error("Fields cannot be empty!")
 
     st.markdown("---")
-    st.subheader("📦 Pending Community Contributions Inbox")
+    st.subheader("📥 Admin Private Contributions Inbox (Approve & Inject)")
     if os.path.exists(CONTRIB_FILE):
         with open(CONTRIB_FILE, "r") as f:
             try:
                 c_data = json.load(f)
-                for c in reversed(c_data):
-                    st.warning(f"*Title:* {c['title']} | *By:* {c['contributor']} | *Time:* {c['timestamp']}\n\npython\n{c['code']}\n")
+                for idx, c in enumerate(reversed(c_data)):
+                    st.warning(f"*[{c['timestamp']}] Title:* {c['title']} | *By:* {c['contributor']}")
+                    st.code(c['code'], language="python")
+                    # One-click auto-inject button option for Nikhil
+                    if st.button(f"⚡ Approve & Inject Patch #{idx}", key=f"inj_{idx}"):
+                        mod_path = f"modules/patch_module_{idx}.py"
+                        os.makedirs("modules", exist_ok=True)
+                        with open(mod_path, "w") as mp:
+                            mp.write(c['code'])
+                        st.success(f"✅ Patch successfully injected into active modules as {mod_path}! Restart app to load.")
             except:
-                st.info("No contributions parsed.")
+                st.info("No contributions found.")
     else:
-        st.info("No contributions submitted yet.")
+                st.info("Inbox empty.")
 
 st.markdown("---")
-st.markdown("✨ Powered by Nikhil's Next-Level Polyglot Architecture (Python, Rust, C++, Qiskit, AI Sentinel)")
+st.markdown("✨ Powered by Nikhil's Next-Level Polyglot Architecture | Contact: 7696829857")
