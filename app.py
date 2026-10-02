@@ -107,6 +107,8 @@ def generate_zero_trust_token(user_role):
 
 LEDGER_FILE = "quantum_ledger.json"
 ATTEMPT_LOG = "security_attempts.json"
+FEEDBACK_FILE = "community_feedback.json"
+CONTRIB_FILE = "community_contributions.json"
 
 def log_to_ledger(payload_data):
     ledger = []
@@ -151,21 +153,22 @@ def check_ai_anomaly_tracker(failed=False):
     return attempts
 
 # UI Header
-st.title("🛡️️ Enterprise Hybrid Quantum Encryption Engine v4.0")
+st.title("🛡️ Enterprise Hybrid Quantum Encryption Engine v4.0")
 st.markdown(f"### Architecture: Polyglot + AI Sentinel + Distributed Ledger + QKD Self-Destruct | Active Plugins: {len(active_plugins)}")
 st.markdown("---")
 
-# ALWAYS VISIBLE: HEALTH BOXES
-box_col1, box_col2, box_col3 = st.columns(3)
+# SEPARATE DISTINCT BOXES FOR HEALTH & LIVE MONITORING
+st.markdown("## 📊 Real-Time System Telemetry & Security Matrix")
+box_col1, box_col2, box_col3, box_col4 = st.columns(4)
 filename = "quantum_vault.txt"
 
 with box_col1:
     st.markdown("### 🚨 AI Threat Hunter")
     anomaly_status = check_ai_anomaly_tracker()
     if anomaly_status["blacklisted"]:
-        st.error("🚨 AI Sentinel: SYSTEM LOCKDOWN! Brute-force threshold breached.")
+        st.error("🚨 SYSTEM LOCKDOWN! Brute-force threshold breached.")
     else:
-        st.success(f"✅ AI Sentinel: Clean (Failed Tries: {anomaly_status['failed_count']}/3)")
+        st.success(f"✅ Status: Clean\nFailed Tries: {anomaly_status['failed_count']}/3")
 
 with box_col2:
     st.markdown("### 🌐 Ledger Integrity")
@@ -176,13 +179,20 @@ with box_col2:
                 ledger_count = len(json.load(f))
             except:
                 ledger_count = 0
-    st.info(f"• *Verified Blocks:* {ledger_count}\n• *Consensus:* SHA-256 Immutable\n• *Status:* Synchronized")
+    st.info(f"• *Blocks:* {ledger_count}\n• *Consensus:* SHA-256\n• *Sync:* Active")
 
 with box_col3:
-    st.markdown("### ⏱️ QKD Self-Destruct Window")
+    st.markdown("### ⏱️ QKD Self-Destruct")
     current_epoch = int(time.time())
     rolling_window = current_epoch // 60
-    st.info(f"• *TTL Expiry Timer:* Active (60s)\n• *Rolling Salt:* {rolling_window}\n• *Auto-Wipe RAM:* Enabled")
+    st.info(f"• *TTL Timer:* 60s Active\n• *Rolling Salt:* {rolling_window}\n• *RAM Wipe:* Ready")
+
+with box_col4:
+    st.markdown("### ⚡ Live Attack Radar")
+    if anomaly_status['failed_count'] > 0:
+        st.warning(f"⚠️ Live Alert: {anomaly_status['failed_count']} suspicious probe(s) detected on web/app gateway!")
+    else:
+        st.success("🛡️ Live Radar: No active attacks. Perimeter secure.")
 
 st.markdown("---")
 
@@ -194,6 +204,8 @@ app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Unlock Vault (Decrypt)", 
     "Distributed Ledger Explorer",
     "Security Logs & Threat Intelligence",
+    "💬 Community Issue & Feedback Hub",
+    "🛠️ Community Contribution & Patch Hub",
     "🏢 Enterprise Download Hub"
 ])
 
@@ -222,7 +234,6 @@ if app_mode == "Lock Secret (Text / Payload)":
                 out_s1_hex = ctypes.create_string_buffer(2048)
                 out_s2_hex = ctypes.create_string_buffer(2048)
                 
-                # Secure Execution with Auto-Fallback
                 try:
                     if cpp_core:
                         cpp_core.cxx_encrypt(message_bits.encode('utf-8'), q_key.encode('utf-8'), total_bits, out_enc_hex, out_s1_hex, out_s2_hex)
@@ -275,7 +286,6 @@ elif app_mode == "Secure File / Photo / Video":
                 out_s1_hex = ctypes.create_string_buffer(2048)
                 out_s2_hex = ctypes.create_string_buffer(2048)
                 
-                # Secure Execution with Auto-Fallback
                 try:
                     if cpp_core:
                         cpp_core.cxx_encrypt(file_bits.encode('utf-8'), q_key.encode('utf-8'), total_bits, out_enc_hex, out_s1_hex, out_s2_hex)
@@ -388,6 +398,97 @@ elif app_mode == "Security Logs & Threat Intelligence":
             st.text(log.strip())
     else:
         st.info("No audit logs recorded yet.")
+
+elif app_mode == "💬 Community Issue & Feedback Hub":
+    st.header("💬 Community Web & App Issue Reporting Hub")
+    st.markdown("Report any problem you are facing with the website, desktop app, or mobile client. This feeds directly into Nikhil's central monitor.")
+    
+    with st.form("feedback_form"):
+        user_name = st.text_input("Your Name / Handle:")
+        platform_type = st.selectbox("Where is the issue occurring?", ["Web App / Streamlit Cloud", "Windows Client App", "macOS / iOS App", "Android Mobile Node"])
+        issue_desc = st.text_area("Describe the problem or bug in detail:")
+        submit_feedback = st.form_submit_button("Submit Issue to Nikhil")
+        
+    if submit_feedback:
+        if not issue_desc:
+            st.error("Please enter a description of the issue.")
+        else:
+            feedback_entry = {
+                "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "name": user_name if user_name else "Anonymous Operative",
+                "platform": platform_type,
+                "issue": issue_desc
+            }
+            feedbacks = []
+            if os.path.exists(FEEDBACK_FILE):
+                with open(FEEDBACK_FILE, "r") as f:
+                    try:
+                        feedbacks = json.load(f)
+                    except:
+                        feedbacks = []
+            feedbacks.append(feedback_entry)
+            with open(FEEDBACK_FILE, "w") as f:
+                json.dump(feedbacks, f, indent=4)
+            st.success("✅ Issue successfully submitted to the developer command center!")
+
+    st.markdown("---")
+    st.subheader("📥 Recent Community Reports & Bug Feed")
+    if os.path.exists(FEEDBACK_FILE):
+        with open(FEEDBACK_FILE, "r") as f:
+            try:
+                f_data = json.load(f)
+                for item in reversed(f_data):
+                    st.info(f"*[{item['timestamp']}] {item['name']} ({item['platform']}):*\n\n{item['issue']}")
+            except:
+                st.info("No reports parsed yet.")
+    else:
+        st.info("No community reports found yet.")
+
+elif app_mode == "🛠️ Community Contribution & Patch Hub":
+    st.header("🛠️ Community Contribution & Offline Patch Injector")
+    st.markdown("Contribute custom code, patches, or security fixes. Once submitted, Nikhil reviews and injects them directly into the core engine!")
+    
+    with st.form("contrib_form"):
+        contrib_name = st.text_input("Contributor Name:")
+        patch_title = st.text_input("Patch / Contribution Title (e.g., Fix AES Padding Bug):")
+        patch_code = st.text_area("Paste Python/C++/Rust code snippet or update notes:")
+        submit_contrib = st.form_submit_button("Upload Contribution Bundle")
+        
+    if submit_contrib:
+        if not patch_code or not patch_title:
+            st.error("Title and code/notes cannot be empty!")
+        else:
+            contrib_entry = {
+                "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "contributor": contrib_name if contrib_name else "Anonymous",
+                "title": patch_title,
+                "code": patch_code,
+                "status": "Pending Admin Review & Injection"
+            }
+            contribs = []
+            if os.path.exists(CONTRIB_FILE):
+                with open(CONTRIB_FILE, "r") as f:
+                    try:
+                        contribs = json.load(f)
+                    except:
+                        contribs = []
+            contribs.append(contrib_entry)
+            with open(CONTRIB_FILE, "w") as f:
+                json.dump(contribs, f, indent=4)
+            st.success("✅ Contribution successfully received! Nikhil will review and inject it into the app core.")
+
+    st.markdown("---")
+    st.subheader("📦 Pending Community Contributions Inbox")
+    if os.path.exists(CONTRIB_FILE):
+        with open(CONTRIB_FILE, "r") as f:
+            try:
+                c_data = json.load(f)
+                for c in reversed(c_data):
+                    st.warning(f"*Title:* {c['title']} | *By:* {c['contributor']} | *Time:* {c['timestamp']}\n\npython\n{c['code']}\n")
+            except:
+                st.info("No contributions parsed.")
+    else:
+        st.info("No contributions submitted yet.")
 
 elif app_mode == "🏢 Enterprise Download Hub":
     st.header("🏢 Enterprise Core Download & Private Server Hub")
