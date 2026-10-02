@@ -16,26 +16,35 @@ st.set_page_config(
     layout="wide",
 )
 
-# Custom 3D Cyberpunk CSS Styling
+# Custom 3D Cyberpunk & 4D Neon Styling
 st.markdown("""
     <style>
     .main-title {
-        font-size: 36px;
-        font-weight: 800;
+        font-size: 38px;
+        font-weight: 900;
         color: #00ffcc;
-        text-shadow: 0px 0px 20px rgba(0, 255, 204, 0.5);
+        text-shadow: 0px 0px 25px rgba(0, 255, 204, 0.6);
+        letter-spacing: 1px;
     }
     .sub-title {
         color: #a0aec0;
-        font-size: 15px;
+        font-size: 16px;
     }
     .stCard {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         border: 1px solid #0f3460;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        box-shadow: 0 8px 32px 0 rgba(0, 255, 204, 0.15);
         border-radius: 12px;
         padding: 20px;
         margin-bottom: 20px;
+    }
+    .pricing-card {
+        background: linear-gradient(145deg, #12121a 0%, #1e1e2f 100%);
+        border: 2px solid #00ffcc;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -45,8 +54,11 @@ st.markdown("""
 def load_config():
     config_path = "security_config.json"
     if os.path.exists(config_path):
-        with open(config_path, "r") as f:
-            return json.load(f)
+        try:
+            with open(config_path, "r") as f:
+                return json.load(f)
+        except Exception:
+            pass
     return {
         "system_name": "Ultimate Quantum Shield Enterprise",
         "version": "4.0.0-Titanium",
@@ -88,11 +100,12 @@ def load_plugins():
         if filename.endswith(".py"):
             module_name = filename[:-3]
             file_path = os.path.join(plugin_dir, filename)
-            spec = importlib.util.spec_from_file_location(module_name, file_path)
-            mod = importlib.util.module_from_spec(spec)
             try:
-                spec.loader.exec_module(mod)
-                plugins[module_name] = mod
+                spec = importlib.util.spec_from_file_location(module_name, file_path)
+                if spec and spec.loader:
+                    mod = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(mod)
+                    plugins[module_name] = mod
             except Exception:
                 pass
     return plugins
@@ -130,10 +143,8 @@ def log_to_ledger(payload_data):
     ledger = []
     if os.path.exists(LEDGER_FILE):
         with open(LEDGER_FILE, "r") as f:
-            try:
-                ledger = json.load(f)
-            except:
-                ledger = []
+            try: ledger = json.load(f)
+            except: ledger = []
     prev_hash = ledger[-1]["block_hash"] if ledger else "0" * 64
     block_data = {
         "index": len(ledger) + 1,
@@ -151,10 +162,8 @@ def check_ai_anomaly_tracker(failed=False):
     attempts = {"failed_count": 0, "blacklisted": False}
     if os.path.exists(ATTEMPT_LOG):
         with open(ATTEMPT_LOG, "r") as f:
-            try:
-                attempts = json.load(f)
-            except:
-                pass
+            try: attempts = json.load(f)
+            except: pass
     if failed:
         attempts["failed_count"] += 1
         if attempts["failed_count"] >= 3:
@@ -168,8 +177,8 @@ st.markdown('<p class="main-title">🛡️ Enterprise Hybrid Quantum Encryption 
 st.markdown(f'<p class="sub-title">Architecture: Polyglot + AI Sentinel + Distributed Ledger | Developer Contact: <b>7696829857</b> | Email: <b>nikhilsharma987880@gmail.com</b></p>', unsafe_allow_html=True)
 st.markdown("---")
 
-# 3D Cyberpunk Telemetry Boxes
-st.markdown("## 📊 Real-Time System Telemetry & 3D Matrix")
+# 4D Cyberpunk Telemetry Boxes
+st.markdown("## 📊 Real-Time System Telemetry & 4D Matrix")
 c1, c2, c3, c4 = st.columns(4)
 filename = "quantum_vault.txt"
 
@@ -213,7 +222,7 @@ with c4:
 
 st.markdown("---")
 
-# Sidebar Navigation
+# Sidebar Navigation with Enterprise Tiers
 st.sidebar.title("🔐 Military Control Panel")
 app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Lock Secret (Text / Payload)", 
@@ -221,6 +230,7 @@ app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Unlock Vault (Decrypt)", 
     "Distributed Ledger Explorer",
     "Security Logs & Threat Intelligence",
+    "🚀 Enterprise Pricing & Licensing Tiers",
     "💬 Community Issue & Feedback Hub",
     "🛠️ Secure Contributor & Patch Hub"
 ])
@@ -285,11 +295,14 @@ elif app_mode == "Unlock Vault (Decrypt)":
         submit_decrypt = st.form_submit_button("Verify & Decrypt")
 
 elif app_mode == "Distributed Ledger Explorer":
-    st.header("⛓️️ Distributed Immutable Ledger Explorer")
+    st.header("⛓️ Distributed Immutable Ledger Explorer")
     if os.path.exists(LEDGER_FILE):
         with open(LEDGER_FILE, "r") as f:
-            for block in reversed(json.load(f)):
-                st.json(block)
+            try:
+                for block in reversed(json.load(f)):
+                    st.json(block)
+            except Exception:
+                st.error("Error reading ledger file.")
     else:
         st.info("No ledger blocks recorded yet.")
 
@@ -301,6 +314,72 @@ elif app_mode == "Security Logs & Threat Intelligence":
                 st.text(log.strip())
     else:
         st.info("No logs yet.")
+
+elif app_mode == "🚀 Enterprise Pricing & Licensing Tiers":
+    st.header("🚀 Enterprise & Military-Grade Licensing Tiers")
+    st.markdown("Select the right lifetime deployment model for your organization. All packages include offline Air-Gapped execution support.")
+    
+    col_p1, col_p2, col_p3, col_p4 = st.columns(4)
+    
+    with col_p1:
+        st.markdown("""
+        <div class="pricing-card">
+            <h3>Standard Tier</h3>
+            <h2>$5,000 - $10,000</h2>
+            <p><b>Lifetime License</b></p>
+            <hr>
+            <p>✅ Core Quantum Engine</p>
+            <p>✅ 1 Year Free Patches</p>
+            <p>✅ Standard Air-Gapped Setup</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Select Standard", key="p1"):
+            st.success("Selected Standard Tier. Contact: 7696829857")
+
+    with col_p2:
+        st.markdown("""
+        <div class="pricing-card">
+            <h3>Advanced Tier</h3>
+            <h2>$20,000</h2>
+            <p><b>Bank / Corporate Defense</b></p>
+            <hr>
+            <p>✅ Advanced HSM Integration</p>
+            <p>✅ Custom API Connectors</p>
+            <p>✅ Priority In-House Support</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Select Advanced", key="p2"):
+            st.success("Selected Advanced Tier. Contact: 7696829857")
+
+    with col_p3:
+        st.markdown("""
+        <div class="pricing-card">
+            <h3>Ultimate Tier</h3>
+            <h2>$50,000+</h2>
+            <p><b>Military-Grade Custom</b></p>
+            <hr>
+            <p>✅ Full Source Air-Gap Deploy</p>
+            <p>✅ 24/7 Dedicated Dev Support</p>
+            <p>✅ Custom Security Modules</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Select Ultimate", key="p3"):
+            st.success("Selected Ultimate Tier. Contact: 7696829857")
+
+    with col_p4:
+        st.markdown("""
+        <div class="pricing-card">
+            <h3>Offline .qpatch</h3>
+            <h2>Custom</h2>
+            <p><b>Secure USB Update Hub</b></p>
+            <hr>
+            <p>✅ Secure .qpatch Injection</p>
+            <p>✅ Zero Internet Dependency</p>
+            <p>✅ Seamless Version Upgrades</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Select Patch System", key="p4"):
+            st.success("Selected Offline Patch System. Contact: 7696829857")
 
 elif app_mode == "💬 Community Issue & Feedback Hub":
     st.header("💬 Issue Reporting Hub")
@@ -350,17 +429,16 @@ elif app_mode == "🛠️ Secure Contributor & Patch Hub":
                 for idx, c in enumerate(reversed(c_data)):
                     st.warning(f"*[{c['timestamp']}] Title:* {c['title']} | *By:* {c['contributor']}")
                     st.code(c['code'], language="python")
-                    # One-click auto-inject button option for Nikhil
                     if st.button(f"⚡ Approve & Inject Patch #{idx}", key=f"inj_{idx}"):
                         mod_path = f"modules/patch_module_{idx}.py"
                         os.makedirs("modules", exist_ok=True)
                         with open(mod_path, "w") as mp:
                             mp.write(c['code'])
                         st.success(f"✅ Patch successfully injected into active modules as {mod_path}! Restart app to load.")
-            except:
-                st.info("No contributions found.")
+            except Exception:
+                st.info("Error reading contributions.")
     else:
-                st.info("Inbox empty.")
+        st.info("Inbox empty.")
 
 st.markdown("---")
-st.markdown("✨ Powered by Nikhil's Next-Level Polyglot Architecture | Contact: 7696829857")
+st.markdown("✨ Powered by Nikhil's Next-Level Polyglot Architecture | Contact: 7696829857 | Email: nikhilsharma987880@gmail.com")
