@@ -152,9 +152,24 @@ def check_ai_anomaly_tracker(failed=False):
     
     return attempts
 
-# UI Header
-st.title("🛡️ Enterprise Hybrid Quantum Encryption Engine v4.0")
-st.markdown(f"### Architecture: Polyglot + AI Sentinel + Distributed Ledger + QKD Self-Destruct | Active Plugins: {len(active_plugins)}")
+# UI Header with Cyberpunk Neon Styling
+st.markdown("""
+    <style>
+    .main-title {
+        font-size: 38px;
+        font-weight: 800;
+        color: #00ffcc;
+        text-shadow: 0px 0px 15px rgba(0, 255, 204, 0.4);
+    }
+    .sub-title {
+        color: #a0aec0;
+        font-size: 16px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown('<p class="main-title">🛡️ Enterprise Hybrid Quantum Encryption Engine v4.0</p>', unsafe_allow_html=True)
+st.markdown(f'<p class="sub-title">Architecture: Polyglot + AI Sentinel + Distributed Ledger + QKD Self-Destruct | Active Modules: {len(active_plugins)}</p>', unsafe_allow_html=True)
 st.markdown("---")
 
 # SEPARATE DISTINCT BOXES FOR HEALTH & LIVE MONITORING
@@ -190,13 +205,13 @@ with box_col3:
 with box_col4:
     st.markdown("### ⚡ Live Attack Radar")
     if anomaly_status['failed_count'] > 0:
-        st.warning(f"⚠️ Live Alert: {anomaly_status['failed_count']} suspicious probe(s) detected on web/app gateway!")
+        st.warning(f"⚠️️ Live Alert: {anomaly_status['failed_count']} suspicious probe(s) detected on web gateway!")
     else:
         st.success("🛡️ Live Radar: No active attacks. Perimeter secure.")
 
 st.markdown("---")
 
-# Sidebar Navigation
+# Sidebar Navigation (Without Download Hub)
 st.sidebar.title("🔐 Military Control Panel")
 app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Lock Secret (Text / Payload)", 
@@ -205,8 +220,7 @@ app_mode = st.sidebar.selectbox("Select Core Operation", [
     "Distributed Ledger Explorer",
     "Security Logs & Threat Intelligence",
     "💬 Community Issue & Feedback Hub",
-    "🛠️ Community Contribution & Patch Hub",
-    "🏢 Enterprise Download Hub"
+    "🛠️ Community Contribution & Patch Hub"
 ])
 
 if app_mode == "Lock Secret (Text / Payload)":
@@ -401,13 +415,13 @@ elif app_mode == "Security Logs & Threat Intelligence":
 
 elif app_mode == "💬 Community Issue & Feedback Hub":
     st.header("💬 Community Web & App Issue Reporting Hub")
-    st.markdown("Report any problem you are facing with the website, desktop app, or mobile client. This feeds directly into Nikhil's central monitor.")
+    st.markdown("Report any problem you are facing with the platform, security nodes, or client connection.")
     
     with st.form("feedback_form"):
         user_name = st.text_input("Your Name / Handle:")
-        platform_type = st.selectbox("Where is the issue occurring?", ["Web App / Streamlit Cloud", "Windows Client App", "macOS / iOS App", "Android Mobile Node"])
+        platform_type = st.selectbox("Where is the issue occurring?", ["Web Core / Cloud Node", "Windows Secure Client", "macOS Node", "Android Terminal"])
         issue_desc = st.text_area("Describe the problem or bug in detail:")
-        submit_feedback = st.form_submit_button("Submit Issue to Nikhil")
+        submit_feedback = st.form_submit_button("Submit Issue to Command Center")
         
     if submit_feedback:
         if not issue_desc:
@@ -446,7 +460,7 @@ elif app_mode == "💬 Community Issue & Feedback Hub":
 
 elif app_mode == "🛠️ Community Contribution & Patch Hub":
     st.header("🛠️ Community Contribution & Offline Patch Injector")
-    st.markdown("Contribute custom code, patches, or security fixes. Once submitted, Nikhil reviews and injects them directly into the core engine!")
+    st.markdown("Contribute custom code, patches, or security fixes to enhance the decentralized core engine.")
     
     with st.form("contrib_form"):
         contrib_name = st.text_input("Contributor Name:")
@@ -475,7 +489,7 @@ elif app_mode == "🛠️ Community Contribution & Patch Hub":
             contribs.append(contrib_entry)
             with open(CONTRIB_FILE, "w") as f:
                 json.dump(contribs, f, indent=4)
-            st.success("✅ Contribution successfully received! Nikhil will review and inject it into the app core.")
+            st.success("✅ Contribution successfully received! Core engine will review for integration.")
 
     st.markdown("---")
     st.subheader("📦 Pending Community Contributions Inbox")
@@ -490,25 +504,5 @@ elif app_mode == "🛠️ Community Contribution & Patch Hub":
     else:
         st.info("No contributions submitted yet.")
 
-elif app_mode == "🏢 Enterprise Download Hub":
-    st.header("🏢 Enterprise Core Download & Private Server Hub")
-    st.markdown("---")
-    st.markdown("""
-    Welcome to the *Enterprise Integration Center*. 
-    For high-security banks, government bodies, and corporate clients who require an *air-gapped, offline deployment* of this hybrid quantum engine (Python + Qiskit + C++ + Rust), you can download the complete standalone release package directly from our official repository.
-    """)
-    
-    st.info("💡 *Security Notice:* Local enterprise installations ensure your encryption keys and quantum_ledger.json never leave your secure internal hardware network.")
-    
-    col_d1, col_d2 = st.columns(2)
-    with col_d1:
-        st.markdown("### 📥 Download Source Core")
-        st.markdown("Get the latest stable Titanium v4.0 source bundle with compiled binaries.")
-        st.markdown("[🔗 Download Quantum Shield v4.0 (.zip)](https://github.com/nikhilsharma987880-bot/quantum/archive/refs/heads/main.zip)")
-    with col_d2:
-        st.markdown("### 🛠️ Developer CLI Setup")
-        st.markdown("Clone and run directly on your private server:")
-        st.code("git clone https://github.com/nikhilsharma987880-bot/quantum.git\ncd quantum\npip install -r requirements.txt\nstreamlit run app.py")
-
 st.markdown("---")
-st.markdown("✨ Built with Nikhil's Next-Level Polyglot Architecture (Python, Rust, C++, Qiskit, AI Sentinel)")
+st.markdown("✨ Powered by Nikhil's Next-Level Polyglot Architecture (Python, Rust, C++, Qiskit, AI Sentinel)")
