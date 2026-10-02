@@ -1,0 +1,210 @@
+[
+    {
+        "index": 1,
+        "timestamp": "2026-10-02 11:16:12",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "3d52e902b02e3c6e5ddcb5c5cedbffa5...",
+            "hsm_s1": "48ac29f5245c31e4",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "block_hash": "e8bae3279679c3051ec436a2f2fa8050715c1f733e9bbf0f1ad6c892d81429a5"
+    },
+    {
+        "index": 2,
+        "timestamp": "2026-10-02 11:16:14",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "4867cbf821d0b8b4e23b000671443256...",
+            "hsm_s1": "67d7501658a218ec",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "e8bae3279679c3051ec436a2f2fa8050715c1f733e9bbf0f1ad6c892d81429a5",
+        "block_hash": "0f050b87c707c9f2858d3845bdc5fef584d000ad6a625fd8230307a09b1d08ad"
+    },
+    {
+        "index": 3,
+        "timestamp": "2026-10-02 11:16:15",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "ceac3d327982d81aa186fda2237a9918...",
+            "hsm_s1": "75a4255e142fc1ee",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "0f050b87c707c9f2858d3845bdc5fef584d000ad6a625fd8230307a09b1d08ad",
+        "block_hash": "6cd9ac659556a42d856cc9457615fca87ef3f430c81b7a4ea49e33c80563b783"
+    },
+    {
+        "index": 4,
+        "timestamp": "2026-10-02 11:16:16",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "fa79685ca6c066679d87567f8ce0bac3...",
+            "hsm_s1": "f119d81185129b69",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "6cd9ac659556a42d856cc9457615fca87ef3f430c81b7a4ea49e33c80563b783",
+        "block_hash": "31d19204ff33a3768e6120afa0f6640faf1d0d6dd94dcc2f4b9957b3b3d9cbf8"
+    },
+    {
+        "index": 5,
+        "timestamp": "2026-10-02 11:16:16",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "8150de76b4a5b6bcbdbafeb343cd0c98...",
+            "hsm_s1": "57fc7448ddeb7961",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "31d19204ff33a3768e6120afa0f6640faf1d0d6dd94dcc2f4b9957b3b3d9cbf8",
+        "block_hash": "92991e8a437592ab88421ec1d841edf877b272e987a1d610d0094cb80634d9f4"
+    },
+    {
+        "index": 6,
+        "timestamp": "2026-10-02 11:16:17",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "96ddeaff4c89d4ba6dc75d670fd49983...",
+            "hsm_s1": "f06e4fbe124ffdcc",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "92991e8a437592ab88421ec1d841edf877b272e987a1d610d0094cb80634d9f4",
+        "block_hash": "b7e2d35e5527f92dd01fad99441cc2e451ad4be930688d5fd68c66d3af981490"
+    },
+    {
+        "index": 7,
+        "timestamp": "2026-10-02 11:16:17",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "1770a95347914e3eabdd20ac48ca2e60...",
+            "hsm_s1": "e266053c8db38bc9",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "b7e2d35e5527f92dd01fad99441cc2e451ad4be930688d5fd68c66d3af981490",
+        "block_hash": "55424877224e98c9b83f5f6f5450a3947c9c663410f98732cf5ac10de8c06747"
+    },
+    {
+        "index": 8,
+        "timestamp": "2026-10-02 11:16:18",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "f867cde3e5af0c130c4396ee2b524bb1...",
+            "hsm_s1": "f9d254faf8eba9a8",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "55424877224e98c9b83f5f6f5450a3947c9c663410f98732cf5ac10de8c06747",
+        "block_hash": "633c7452c78997aaa8a526ada1b7d4715a7a54a1f95e9e9af11c0d5170329476"
+    },
+    {
+        "index": 9,
+        "timestamp": "2026-10-02 11:16:18",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "6607d79030711e26deeb70e275562bf1...",
+            "hsm_s1": "86d68cb365521117",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "633c7452c78997aaa8a526ada1b7d4715a7a54a1f95e9e9af11c0d5170329476",
+        "block_hash": "9d5f86dc36064cc376047e30640aed7a89be6503525ab68de81f4b094f3a63d3"
+    },
+    {
+        "index": 10,
+        "timestamp": "2026-10-02 11:16:18",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "d0cbfd4147fa8770e84b01894a3ff26d...",
+            "hsm_s1": "c4b83a54318d6896",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "9d5f86dc36064cc376047e30640aed7a89be6503525ab68de81f4b094f3a63d3",
+        "block_hash": "1046bc84a6fd6ba6e3803822d0eb0c6c477f65104c357104cddcc8f0148c39d6"
+    },
+    {
+        "index": 11,
+        "timestamp": "2026-10-02 11:16:18",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "56452f534fba0c067a57bae57403bf28...",
+            "hsm_s1": "f1dc696d0cd43b3a",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "1046bc84a6fd6ba6e3803822d0eb0c6c477f65104c357104cddcc8f0148c39d6",
+        "block_hash": "0649985e6f1e6487428ae6ae9a7cd9b919d025bf8bbac28af8646107f10f983e"
+    },
+    {
+        "index": 12,
+        "timestamp": "2026-10-02 11:16:29",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "7d409b43cdae546bc77a5369c6b2f62d...",
+            "hsm_s1": "1b49a362ec9a7bf4",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "0649985e6f1e6487428ae6ae9a7cd9b919d025bf8bbac28af8646107f10f983e",
+        "block_hash": "3c11a719eebde061e8713154fb9ded4d301207f99b5e3a8c3eba9cb7d4f1066c"
+    },
+    {
+        "index": 13,
+        "timestamp": "2026-10-02 11:16:31",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "e81cd9749c38ed2b2ac46d05ce55f26e...",
+            "hsm_s1": "ec14ada5d3a5c13a",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "3c11a719eebde061e8713154fb9ded4d301207f99b5e3a8c3eba9cb7d4f1066c",
+        "block_hash": "1b0abf6b968ce8956f35b7150b9e42e0c258dc25326677abaf6db1b860272226"
+    },
+    {
+        "index": 14,
+        "timestamp": "2026-10-02 11:16:32",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "58dce6728419a4ece18c4b243e13985c...",
+            "hsm_s1": "ffa4cd5c81eae0b2",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "1b0abf6b968ce8956f35b7150b9e42e0c258dc25326677abaf6db1b860272226",
+        "block_hash": "669fc17efceb296ca574dd4d6c477347cf1b2bce85b9802f369a6eb18e1c02f6"
+    },
+    {
+        "index": 15,
+        "timestamp": "2026-10-02 11:16:33",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "cde866b8237f5a4559fe957a6b5ce2c4...",
+            "hsm_s1": "c9bfe131486817b9",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "669fc17efceb296ca574dd4d6c477347cf1b2bce85b9802f369a6eb18e1c02f6",
+        "block_hash": "f6e46e48b9ce241f1c8be3126b21dae4ba764893f7a5ad26ae9f106bee4e5877"
+    },
+    {
+        "index": 16,
+        "timestamp": "2026-10-02 11:16:35",
+        "data": {
+            "role": "SYSTEM_ROOT",
+            "token": "e5271e8ef279efe47cb48443f41e9567",
+            "ciphertext": "6d87c3372a8b4a872afc5c4ff655447e...",
+            "hsm_s1": "0d22543ac35932e9",
+            "ttl_expiry": 32
+        },
+        "previous_hash": "f6e46e48b9ce241f1c8be3126b21dae4ba764893f7a5ad26ae9f106bee4e5877",
+        "block_hash": "29f5839f97dff2b85e55e00d160f40d6c459957544797da3b815bf0139f463cb"
+    }
+]
